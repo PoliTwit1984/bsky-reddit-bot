@@ -1,0 +1,41 @@
+# Global Settings for Reddit Content Downloader
+settings:
+    # Output directory for downloaded content
+    output_dir: "downloads"
+    
+    # Default timeout in seconds
+    default_timeout: 30
+    
+    # Maximum number of retries for failed operations
+    max_retries: 3
+    
+    # Delay between retries in seconds
+    retry_delay: 5
+    
+    # Default batch size for processing
+    default_batch_size: 5
+    
+    # Logging configuration
+    logging_config:
+      version: 1
+      disable_existing_loggers: false
+      formatters:
+        standard:
+          format: "%(asctime)s - %(levelname)s - %(message)s"
+      handlers:
+        console:
+          class: logging.StreamHandler
+          formatter: standard
+          level: INFO
+        file:
+          class: logging.handlers.RotatingFileHandler
+          filename: logs/reddit_downloader.log
+          formatter: standard
+          level: INFO
+          maxBytes: 10485760  # 10MB
+          backupCount: 5
+      loggers:
+        "":  # Root logger
+          handlers: [console, file]
+          level: INFO
+          propagate: true

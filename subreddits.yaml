@@ -1,0 +1,12 @@
+# Subreddit configurations
+subreddits:
+  - name: "quotesporn"                # Required: Name of the subreddit (without r/)
+    filter_type: "hot"                     # Required: Sort method for posts. Options: "hot", "new", "top", "rising"
+    time_filter: "day"                     # Required for "top" filter_type only. Options: "hour", "day", "week", "month", "year", "all"
+    limit: 1                              # Optional: Number of posts to fetch per run (default: 10)
+    download_media: true                   # Optional: Whether to download media files (default: true)
+    download_comments: true                # Optional: Whether to download comments (default: false)
+    max_comments: 20                       # Optional: Number of top comments to download, sorted by score (default: 5)
+    skip_no_media: false                    # Optional: Skip posts without media or delete their folders (default: true)
+    batch_size: 5                          # Optional: Number of items to process in each batch (default: 5)
+    timeout: 30                            # Optional: Timeout in seconds for operations (default: 30)

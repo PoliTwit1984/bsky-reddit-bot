@@ -1,0 +1,38 @@
+# Reddit Content Downloader Dependencies
+# ================================
+
+# Reddit API Wrapper
+praw==7.8.1
+
+# Bluesky/AT Protocol
+atproto
+
+# Environment Variables
+python-dotenv==1.0.1
+
+# YAML Configuration
+PyYAML==6.0.2
+
+# HTTP Requests
+requests==2.32.3
+
+# Type Hints Support
+typing-extensions==4.9.0
+
+# Logging Extras (for RotatingFileHandler)
+python-json-logger==2.0.7
+
+# Media Download Support
+yt-dlp==2024.11.18
+
+# Utility packages
+schedule
+
+# Crypto dependencies
+base58
+cryptography
+
+# Image Processing
+Pillow
+# Async Support
+aiohttp
