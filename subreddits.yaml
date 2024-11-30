@@ -1,8 +1,8 @@
 # Subreddit configurations
 subreddits:
   - name: "dataisbeautiful"                # Required: Name of the subreddit (without r/)
-    filter_type: "rising"                     # Required: Sort method for posts. Options: "hot", "new", "top", "rising"
-    time_filter: "all"                     # Required for "top" filter_type only. Options: "hour", "day", "week", "month", "year", "all"
+    filter_type: "top"                     # Required: Sort method for posts. Options: "hot", "new", "top", "rising"
+    time_filter: "day"                     # Required for "top" filter_type only. Options: "hour", "day", "week", "month", "year", "all"
     limit: 1                              # Optional: Number of posts to fetch per run (default: 10)
     download_media: true                   # Optional: Whether to download media files (default: true)
     download_comments: true                # Optional: Whether to download comments (default: false)

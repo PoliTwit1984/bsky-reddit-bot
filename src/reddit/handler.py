@@ -56,21 +56,35 @@ class RedditHandler:
     def _generate_summary(self, title: str, comments: str) -> str:
         """Generate a summary of the post using OpenAI."""
         try:
-            prompt = f"read these comments from a reddit post and the post title and write a 2-3 sentence summary. This post is for bluesky so use a casual tone, feel free to add a couple of emojis.\n\nTitle: {title}\n\nComments:\n{comments}. Don't mention reddit or the subreddit in the summary. It should be less than 275 characters."
+            # Modified prompt to ensure shorter output
+            prompt = f"""Write a very brief 1-2 sentence summary (max 250 characters) of this reddit post and its comments. 
+            Add 1-2 relevant emojis at the end. Keep it casual and engaging.
+            Don't mention reddit or subreddits.
+
+            Title: {title}
+
+            Comments: {comments}"""
             
             completion = self.openai_client.chat.completions.create(
                 model="gpt-4o",
                 messages=[
-                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "system", "content": "You are a helpful assistant that writes very concise summaries."},
                     {"role": "user", "content": prompt}
-                ]
+                ],
+                max_tokens=100  # Limit token count to ensure shorter response
             )
             
-            return completion.choices[0].message.content
+            summary = completion.choices[0].message.content.strip()
+            # Ensure summary is within Bluesky's limit
+            if len(summary) > 250:
+                summary = summary[:247] + "..."
+            
+            return summary
             
         except Exception as e:
             self.logger.error(f"Error generating summary: {str(e)}")
-            return f"Error generating summary: {str(e)}"
+            # Return truncated title as fallback
+            return f"{title[:247]}..." if len(title) > 250 else title
 
     def _get_date_based_dir(self, base_dir: str) -> str:
         """Get date-based directory path."""

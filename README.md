@@ -1,15 +1,16 @@
 # Reddit to Bluesky Bot
 
-A Python bot that downloads content from Reddit, generates AI-powered summaries, and posts them to Bluesky. The bot operates in two parts: one script for downloading Reddit content and another for posting to Bluesky.
+A Python bot that downloads content from Reddit, generates AI-powered summaries, and posts them to Bluesky. The bot operates in two parts: one script for downloading Reddit content and another for posting to Bluesky, with a scheduler that runs both scripts periodically.
 
 ## Features
 
 - Downloads Reddit posts and comments
-- Generates AI summaries using OpenAI's GPT-4
+- Generates AI summaries using OpenAI's GPT-4o (optimized for Bluesky's character limits)
 - Downloads associated media files
-- Posts summaries and media to Bluesky
+- Posts summaries and media to Bluesky with proper aspect ratios
 - Configurable subreddit settings
 - Organized content storage by date
+- Automatic scheduling of content downloads and posts
 
 ## Setup
 
@@ -46,34 +47,32 @@ subreddits:
 
 ## Usage
 
-### 1. Download Reddit Content
+### Running the Scheduler
 
-Run the Reddit downloader:
+Run the main scheduler which handles both Reddit downloads and Bluesky posts:
+```bash
+python main.py
+```
+
+This will:
+1. Download content from Reddit
+2. Generate AI summaries (optimized for Bluesky's 300 character limit)
+3. Post content to Bluesky
+4. Clean up downloaded content after successful posting
+
+### Manual Operation
+
+You can also run the scripts individually:
+
+1. Download Reddit Content:
 ```bash
 python reddit-main.py
 ```
 
-This will:
-- Create a date-based directory (YYYY-MM-DD)
-- Download posts from configured subreddits
-- Generate AI summaries
-- Save content to the following files:
-  - post-summary.txt: AI-generated summary
-  - title.txt: Post title
-  - url.txt: Original Reddit URL
-  - media/: Downloaded images/videos
-
-### 2. Post to Bluesky
-
-Post the content to Bluesky:
+2. Post to Bluesky:
 ```bash
 python bluesky-main.py
 ```
-
-This will:
-- Login to Bluesky using app password
-- Find the latest downloaded content
-- Post the summary and any media to Bluesky
 
 ## Directory Structure
 
@@ -87,7 +86,9 @@ downloads/
 │       └── media/
 │           └── downloaded files
 logs/
-└── reddit_downloader.log
+├── reddit_downloader.log
+├── bluesky.log
+└── scheduler.log
 ```
 
 ## Configuration Files
@@ -96,6 +97,20 @@ logs/
 - `subreddits.yaml`: Subreddit-specific settings
 - `.env`: API credentials and configuration
 
+## Content Processing
+
+### Summary Generation
+- Uses OpenAI's GPT-4o model
+- Generates summaries under 250 characters (for Bluesky's 300 character limit)
+- Includes relevant emojis
+- Maintains casual, engaging tone
+
+### Image Processing
+- Automatically processes images to 16:9 aspect ratio
+- Centers and crops images appropriately
+- Optimizes quality for Bluesky's requirements
+- Handles various input formats (jpg, png, gif)
+
 ## Dependencies
 
 - praw: Reddit API wrapper
@@ -103,12 +118,16 @@ logs/
 - openai: OpenAI API for summaries
 - python-dotenv: Environment variable management
 - PyYAML: Configuration parsing
+- Pillow: Image processing
+- yt-dlp: Media download support
 
 ## Notes
 
-- Media downloads are automatic for supported formats (jpg, png, gif)
-- Summaries are generated in a casual tone with emojis for Bluesky
+- Media downloads are automatic for supported formats
+- Summaries are optimized for Bluesky's character limits
+- Images are processed to maintain proper aspect ratios
 - Content is organized by date for easy management
 - Detailed logs are available in the logs directory
+- Automatic cleanup after successful posts
 
 For more detailed information about the Reddit downloading functionality, see [reddit-readme.md](reddit-readme.md).

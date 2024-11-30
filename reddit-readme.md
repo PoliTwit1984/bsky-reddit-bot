@@ -1,6 +1,6 @@
 # Reddit Content Downloader
 
-A powerful Python-based tool for downloading content from Reddit, including media files and comments, with AI-powered summaries.
+A powerful Python-based tool for downloading content from Reddit, including media files and comments, with AI-powered summaries optimized for Bluesky's character limits.
 
 ## Features
 
@@ -15,6 +15,7 @@ A powerful Python-based tool for downloading content from Reddit, including medi
 - Skip posts without media (configurable)
 - Downloads stored in configurable output directory
 - Configurable file size limits and type restrictions
+- Image processing for Bluesky's aspect ratio requirements
 
 ### Comment Handling
 - Fetches top comments for each post (configurable per subreddit)
@@ -29,10 +30,12 @@ A powerful Python-based tool for downloading content from Reddit, including medi
 - Comment length truncation for readability
 
 ### AI-Powered Summaries
-- Generates concise summaries of posts using OpenAI's GPT-4
-- Casual tone with emojis, perfect for Bluesky
+- Generates concise summaries using OpenAI's GPT-4o
+- Strictly limited to 250 characters for Bluesky compatibility
+- Casual tone with emojis
 - Summarizes both post title and comments
-- 3-4 sentence format for easy reading
+- 1-2 sentence format for brevity
+- Fallback to truncated title if summary generation fails
 
 ### Subreddit Configuration
 Configuration is managed through `subreddits.yaml`:
@@ -89,7 +92,7 @@ The bot will:
 2. Fetch posts from configured subreddits
 3. Download associated media (images, videos, etc.)
 4. Collect specified number of top comments
-5. Generate AI-powered summaries
+5. Generate AI-powered summaries (optimized for Bluesky)
 6. Store everything in the date-based directory
 
 ## Configuration Options
@@ -112,12 +115,20 @@ The bot will:
   - Platform-specific: YouTube, Imgur, Redgifs
 - Configurable file size limits
 - Automatic file naming based on post ID
+- Image processing for Bluesky compatibility
 
 ### Comment Settings
 - Configurable number of comments per subreddit
 - Comments sorted by score (highest first)
 - Skip stickied comments
 - Customizable comment formatting
+
+### Summary Settings
+- Maximum length: 250 characters
+- Casual tone with emojis
+- 1-2 sentence format
+- Fallback to truncated title
+- Token limit for OpenAI API
 
 ## Output Structure
 
@@ -144,14 +155,16 @@ downloads/
     └── ...
 
 logs/
-└── reddit_downloader.log
+├── reddit_downloader.log
+├── bluesky.log
+└── scheduler.log
 ```
 
 ### Output Files
 - `post_info.txt`: Contains comprehensive post information
 - `title.txt`: Contains only the post title
 - `url.txt`: Contains the original Reddit post URL
-- `post-summary.txt`: AI-generated summary of the post and comments
+- `post-summary.txt`: AI-generated summary (250 char max)
 - `comments.txt`: Top comments from the post
 - `media/`: Directory containing downloaded media files
 
@@ -162,6 +175,8 @@ logs/
 - Detailed logging of all operations
 - Skip mechanism for problematic posts
 - Automatic cleanup of empty directories
+- Fallback mechanisms for summary generation
+- Character limit enforcement
 
 ## Dependencies
 
@@ -173,6 +188,7 @@ logs/
 - typing-extensions: Type hint support
 - python-json-logger: Enhanced logging
 - openai: OpenAI API integration for summaries
+- Pillow: Image processing
 
 ## Notes
 
@@ -183,4 +199,6 @@ logs/
 - All operations are logged for monitoring
 - Configuration can be updated without code changes
 - Supports both direct media files and platform-specific content
-- AI summaries are generated in a casual tone with emojis
+- AI summaries are optimized for Bluesky's character limits
+- Images are processed to maintain proper aspect ratios
+- Automatic cleanup after successful Bluesky posts
